@@ -1,7 +1,15 @@
+from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from axes.decorators import watch_login
 
+_login_view_path = getattr(settings, 'AXES_LOGIN_VIEW',\
+                               'django.contrib.auth.views.login')
+_module_name = '.'.join(_login_view_path.split('.')[:-1])
+_login_view = _login_view_path.split('.')[-1]
+_module = __import__(_module_name, globals(), locals(),
+                     [_login_view,], -1
+                    )
+login_view = getattr(_module, _login_view, None)
 
 class FailedLoginMiddleware(object):
 
@@ -12,7 +20,7 @@ class FailedLoginMiddleware(object):
         admin.site.login = watch_login(admin.site.login)
 
         # and the regular auth login page
-        auth_views.login = watch_login(auth_views.login)
+        _module.__dict__[_login_view] = watch_login(login_view)
 
 
 class FailedAdminLoginMiddleware(object):
@@ -27,5 +35,5 @@ class FailedAuthLoginMiddleware(object):
     def __init__(self, *args, **kwargs):
         super(FailedAuthLoginMiddleware, self).__init__(*args, **kwargs)
 
-        # watch the admin login page
-        auth_views.login = watch_login(auth_views.login)
+        # watch the regular auth login page
+        _module.__dict__[_login_view] = watch_login(login_view)

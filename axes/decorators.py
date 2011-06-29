@@ -51,7 +51,8 @@ def query2str(items):
 
     return '\n'.join(kvs)
 
-log = logging.getLogger(LOGGER)
+log = logging.getLogger(LOGGER);
+log.propagate = False
 if VERBOSE:
     log.info('AXES: BEGIN LOG')
     log.info('Using django-axes ' + axes.get_version())

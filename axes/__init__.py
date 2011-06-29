@@ -1,8 +1,14 @@
 import logging
 import os
-from django.conf import settings
 
-VERSION = (1, 2, 4, 'rc1')
+LOGGER = ""
+try:
+    from django.conf import settings
+    LOGGER = getattr(settings, 'AXES_LOGGER', 'axes.watch_login')
+except ImportError:
+    pass
+
+VERSION = (1, 2, 4, 'rc2')
 
 
 def get_version():
@@ -33,4 +39,4 @@ else:
     fileLog.setFormatter(formatter)
 
     # add the handler to the root logger
-    logging.getLogger('').addHandler(fileLog)
+    logging.getLogger(LOGGER).addHandler(fileLog)
