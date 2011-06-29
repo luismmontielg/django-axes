@@ -127,6 +127,8 @@ These should be defined in your ``settings.py`` file.
     be used. Default: ``None``
   * ``AXES_VERBOSE``: If ``True``, you'll see slightly more logging for Axes.
     Default: ``True``
+  * ``AXES_LOGIN_VIEW``: Specifies a the login view, in case you've wrapped it.
+    Default: ``django.contrib.auth.views.login``
 
 Usage
 =====
