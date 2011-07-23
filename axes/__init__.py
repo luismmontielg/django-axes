@@ -16,7 +16,7 @@ def get_version():
 
 try:
     LOGFILE = os.path.join(settings.DIRNAME, 'axes.log')
-except (ImportError, AttributeError):
+except:
     # if we have any problems, we most likely don't have a settings module
     # loaded
     pass
